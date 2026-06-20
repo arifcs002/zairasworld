@@ -635,6 +635,18 @@ export class AppComponent implements OnInit {
     }
   }
 
+
+  getMediaUrl(url: string | undefined): string {
+    if (!url) return '';
+    if (url.startsWith('/')) {
+      const backendBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:5279'
+        : `http://${window.location.hostname}:5050`;
+      return `${backendBase}${url}`;
+    }
+    return url;
+  }
+
   getSelectedCategorySizes(): string[] {
     const selectedCat = this.categories.find(c => c.id === this.productCategoryId);
     if (!selectedCat || !selectedCat.sizes) return [];

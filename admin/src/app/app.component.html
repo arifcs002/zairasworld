@@ -20,7 +20,7 @@
   <header class="bg-[#1A3644] text-white p-3.5 shadow-lg sticky top-0 z-50 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0 border-b border-[#4CE0E5]/20">
     <div class="flex items-center space-x-2.5">
       <div class="h-9 w-9 bg-[#11222F] rounded-xl flex items-center justify-center p-0.5 border border-[#4CE0E5]/30 overflow-hidden shadow-inner">
-        <img src="http://localhost:5279/uploads/zairas_world_logo.png" alt="Logo" class="w-full h-full object-cover">
+        <img [src]="getMediaUrl('/uploads/zairas_world_logo.png')" alt="Logo" class="w-full h-full object-cover">
       </div>
       <div class="flex flex-col">
         <span class="font-extrabold text-base tracking-tight text-white flex items-center gap-1">
@@ -127,7 +127,7 @@
               
               <!-- Product Image Box -->
               <div class="h-44 bg-slate-50 border-b border-slate-100 flex items-center justify-center overflow-hidden relative">
-                <img *ngIf="p.imageUrl" [src]="p.imageUrl.startsWith('/') ? 'http://localhost:5279' + p.imageUrl : p.imageUrl" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                <img *ngIf="p.imageUrl" [src]="getMediaUrl(p.imageUrl)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                 <ion-icon *ngIf="!p.imageUrl" name="footsteps-sharp" class="text-slate-300 text-4xl"></ion-icon>
                 
                 <!-- Save Tag -->
@@ -197,7 +197,7 @@
               <div *ngFor="let item of shopCart" class="py-3 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                   <div class="h-12 w-12 bg-slate-50 border rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
-                    <img *ngIf="item.product.imageUrl" [src]="item.product.imageUrl.startsWith('/') ? 'http://localhost:5279' + item.product.imageUrl : item.product.imageUrl" class="w-full h-full object-cover">
+                    <img *ngIf="item.product.imageUrl" [src]="getMediaUrl(item.product.imageUrl)" class="w-full h-full object-cover">
                     <ion-icon *ngIf="!item.product.imageUrl" name="footsteps" class="text-slate-300 text-xl"></ion-icon>
                   </div>
                   <div>
@@ -343,7 +343,7 @@
             <!-- Shoe Photo & Info -->
             <div class="space-y-3">
               <div class="h-40 w-full bg-slate-100 rounded-xl overflow-hidden border border-slate-200 shadow-inner flex items-center justify-center relative">
-                <img *ngIf="p.imageUrl" [src]="p.imageUrl.startsWith('/') ? 'http://localhost:5279' + p.imageUrl : p.imageUrl" class="w-full h-full object-cover">
+                <img *ngIf="p.imageUrl" [src]="getMediaUrl(p.imageUrl)" class="w-full h-full object-cover">
                 <ion-icon *ngIf="!p.imageUrl" name="footsteps-sharp" class="text-slate-300 text-4xl"></ion-icon>
               </div>
 
@@ -459,7 +459,7 @@
             <div class="sm:col-span-5 flex flex-col items-center">
               <label class="block text-[10px] font-bold text-slate-500 mb-1 self-start tracking-wider">SAMPLE PHOTO</label>
               <div class="w-full h-32 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col items-center justify-center overflow-hidden relative shadow-sm">
-                <img *ngIf="productImageUrl" [src]="productImageUrl.startsWith('/') ? 'http://localhost:5279' + productImageUrl : productImageUrl" class="w-full h-full object-cover">
+                <img *ngIf="productImageUrl" [src]="getMediaUrl(productImageUrl)" class="w-full h-full object-cover">
                 <div *ngIf="!productImageUrl" class="text-center p-2 text-slate-400">
                   <ion-icon name="camera" class="text-2xl mb-1"></ion-icon>
                   <span class="text-[9px] block font-bold text-slate-500">Sample Image</span>
@@ -669,7 +669,7 @@
           <div *ngFor="let item of shopCart" class="py-3.5 flex items-start justify-between">
             <div class="flex space-x-3 min-w-0">
               <div class="h-12 w-12 bg-slate-50 border rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
-                <img *ngIf="item.product.imageUrl" [src]="item.product.imageUrl.startsWith('/') ? 'http://localhost:5279' + item.product.imageUrl : item.product.imageUrl" class="w-full h-full object-cover">
+                <img *ngIf="item.product.imageUrl" [src]="getMediaUrl(item.product.imageUrl)" class="w-full h-full object-cover">
                 <ion-icon *ngIf="!item.product.imageUrl" name="footsteps" class="text-slate-300 text-xl"></ion-icon>
               </div>
               <div class="space-y-0.5 min-w-0">

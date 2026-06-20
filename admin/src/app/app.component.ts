@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
   
   // App View Modes
   viewMode: 'admin' | 'shop' = 'admin';
-  activeTab: 'dashboard' | 'products-list' | 'products-add' | 'pos' | 'orders' | 'settings' | 'users' | 'categories' | 'config' = 'products-list';
+  activeTab: 'dashboard' | 'products-list' | 'products-add' | 'pos' | 'orders' | 'settings' | 'users' | 'categories' | 'config' = 'dashboard';
 
   // Category State
   categories: any[] = [];
@@ -749,6 +749,29 @@ export class AppComponent implements OnInit {
       console.error("Error saving products", err);
       alert("Failed to save products.");
     });
+  }
+
+
+  // Dynamic Dashboard Stats
+  getInventoryTotalStock(): number {
+    return this.products.reduce((sum, p) => sum + (p.stockQuantity || 0), 0);
+  }
+
+  getLowStockProducts(): any[] {
+    return this.products.filter(p => p.stockQuantity < 10);
+  }
+
+  getSupplierDistribution(): { name: string, count: number }[] {
+    const map: { [name: string]: number } = {};
+    this.products.forEach(p => {
+      const sName = p.brandName || p.categoryName || 'General';
+      map[sName] = (map[sName] || 0) + 1;
+    });
+    return Object.keys(map).map(k => ({ name: k, count: map[k] }));
+  }
+
+  getTotalInventoryValue(): number {
+    return this.products.reduce((sum, p) => sum + ((p.price || 0) * (p.stockQuantity || 0)), 0);
   }
 
   logout() {

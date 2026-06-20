@@ -1,0 +1,161 @@
+name: Deploy to Linux Server
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME_BACKEND: ghcr.io/${{ github.repository }}/backend:latest
+  IMAGE_NAME_FRONTEND: ghcr.io/${{ github.repository }}/admin-dashboard:latest
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Backend Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME_BACKEND }}
+
+      - name: Build and push Frontend Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./admin
+          file: ./admin/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME_FRONTEND }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare production docker-compose
+        run: |
+          cat << 'EOF' > docker-compose.prod.yml
+          version: '3.8'
+          services:
+            postgres:
+              image: postgres:15-alpine
+              container_name: ecommerce-postgres
+              ports:
+                - "5432:5432"
+              environment:
+                POSTGRES_DB: ecommerce_db
+                POSTGRES_USER: dev_user
+                POSTGRES_PASSWORD: dev_password
+              volumes:
+                - pgdata:/var/lib/postgresql/data
+              networks:
+                - ecommerce-network
+
+            redis:
+              image: redis:7-alpine
+              container_name: ecommerce-redis
+              ports:
+                - "6380:6379"
+              volumes:
+                - redisdata:/data
+              networks:
+                - ecommerce-network
+
+            minio:
+              image: minio/minio:latest
+              container_name: ecommerce-storage
+              ports:
+                - "9000:9000"
+                - "9001:9001"
+              environment:
+                MINIO_ROOT_USER: minioadmin
+                MINIO_ROOT_PASSWORD: minioadminpassword
+              command: server /data --console-address ":9001"
+              volumes:
+                - miniadata:/data
+              networks:
+                - ecommerce-network
+
+            backend:
+              image: ghcr.io/${{ github.repository }}/backend:latest
+              container_name: ecommerce-backend
+              ports:
+                - "5000:8080"
+              environment:
+                - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=ecommerce_db;Username=dev_user;Password=dev_password;Include Error Detail=true;
+                - Redis__Configuration=redis:6379
+                - Jwt__Secret=super-secret-key-change-in-prod-long-enough-32-chars
+                - AwsS3__ServiceUrl=http://minio:9000
+                - AwsS3__AccessKey=minioadmin
+                - AwsS3__SecretKey=minioadminpassword
+                - AwsS3__BucketName=ecommerce-media
+              depends_on:
+                - postgres
+                - redis
+                - minio
+              networks:
+                - ecommerce-network
+
+            admin-dashboard:
+              image: ghcr.io/${{ github.repository }}/admin-dashboard:latest
+              container_name: ecommerce-admin
+              ports:
+                - "4200:80"
+              depends_on:
+                - backend
+              networks:
+                - ecommerce-network
+
+          volumes:
+            pgdata:
+            redisdata:
+            miniadata:
+
+          networks:
+            ecommerce-network:
+              driver: bridge
+          EOF
+
+      - name: Copy docker-compose to Linux Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          source: "docker-compose.prod.yml"
+          target: "~/zairas_world/"
+
+      - name: Deploy containers via SSH Command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            mkdir -p ~/zairas_world
+            cd ~/zairas_world
+            mv -f docker-compose.prod.yml docker-compose.yml
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker compose pull
+            docker compose up -d

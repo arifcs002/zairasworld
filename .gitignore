@@ -1,0 +1,25 @@
+# Build outputs
+**/bin/
+**/obj/
+**/dist/
+**/out/
+
+# Dependency folders
+**/node_modules/
+**/.angular/
+
+# System and editor files
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Database & local files
+*.db
+*.db-shm
+*.db-wal
+*.log
+wwwroot/uploads/*
+!wwwroot/uploads/.gitkeep

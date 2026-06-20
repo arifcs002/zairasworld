@@ -99,7 +99,7 @@ jobs:
               image: ghcr.io/${{ github.repository }}/backend:latest
               container_name: ecommerce-backend
               ports:
-                - "5000:8080"
+                - "5050:8080"
               environment:
                 - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=ecommerce_db;Username=dev_user;Password=dev_password;Include Error Detail=true;
                 - Redis__Configuration=redis:6379

@@ -62,7 +62,9 @@ interface LoggedInUser {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppComponent implements OnInit {
-  apiUrl = 'http://localhost:5279/api';
+  apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5279/api'
+    : `http://${window.location.hostname}:5050/api`;
   
   // App View Modes
   viewMode: 'admin' | 'shop' = 'admin';

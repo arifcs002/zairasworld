@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
   
   // App View Modes
   viewMode: 'admin' | 'shop' = 'admin';
-  activeTab: 'dashboard' | 'products-list' | 'products-add' | 'pos' | 'orders' | 'settings' | 'users' | 'categories' | 'config' = 'dashboard';
+  activeTab: 'dashboard' | 'products-list' | 'products-add' | 'pos' | 'orders' | 'settings' | 'users' | 'categories' | 'config' | 'checkout' = 'dashboard';
 
   // Category State
   categories: any[] = [];
@@ -772,6 +772,51 @@ export class AppComponent implements OnInit {
 
   getTotalInventoryValue(): number {
     return this.products.reduce((sum, p) => sum + ((p.price || 0) * (p.stockQuantity || 0)), 0);
+  }
+
+
+  // MFS and checkout variables
+  checkoutShippingName = '';
+  checkoutShippingPhone = '';
+  checkoutShippingAddress = '';
+  checkoutDistrict = '';
+  checkoutThana = '';
+  checkoutPaymentMethod = 'COD';
+  checkoutMfsNumber = '';
+  checkoutMfsTrxId = '';
+
+  buyNowProduct(product: Product) {
+    this.shopCart = [{ product, quantity: 1 }];
+    this.activeTab = 'checkout';
+  }
+
+  processStorefrontCheckout() {
+    if (this.shopCart.length === 0) {
+      alert('Your cart is empty.');
+      return;
+    }
+    if (!this.checkoutShippingName || !this.checkoutShippingPhone || !this.checkoutShippingAddress) {
+      alert('Please fill in Name, Phone and Address fields.');
+      return;
+    }
+    if (this.checkoutPaymentMethod === 'BKASH' && (!this.checkoutMfsNumber || !this.checkoutMfsTrxId)) {
+      alert('Please fill in your bKash Mobile Number and Transaction ID.');
+      return;
+    }
+
+    alert('Order placed successfully! Thank you for shopping with Zaira\'s World.');
+    this.shopCart = [];
+    this.showShopCartModal = false;
+    this.activeTab = 'dashboard';
+    
+    // Clear fields
+    this.checkoutShippingName = '';
+    this.checkoutShippingPhone = '';
+    this.checkoutShippingAddress = '';
+    this.checkoutDistrict = '';
+    this.checkoutThana = '';
+    this.checkoutMfsNumber = '';
+    this.checkoutMfsTrxId = '';
   }
 
   logout() {

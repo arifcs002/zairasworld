@@ -53,281 +53,265 @@
       <button (click)="activeTab = 'categories'" 
               [class.bg-[#1A3644]]="activeTab === 'categories'" 
               class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 text-white">
-        <ion-icon name="folder-open-outline" class="text-sm"></ion-icon>
-        <span>Categories</span>
+        <ion-icon name="settings-outline" class="text-sm"></ion-icon>
+        <span>Configuration</span>
       </button>
       <button (click)="activeTab = 'config'" 
               [class.bg-[#1A3644]]="activeTab === 'config'" 
               class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 text-white">
-        <ion-icon name="options-outline" class="text-sm"></ion-icon>
-        <span>Config</span>
+        <ion-icon name="people-outline" class="text-sm"></ion-icon>
+        <span>Supplier Add</span>
+      </button>
+
+      <!-- Cart Icon Trigger -->
+      <button (click)="showShopCartModal = !showShopCartModal" class="relative bg-amber-500 hover:bg-amber-600 px-4 py-2 rounded-lg text-xs font-bold text-white flex items-center justify-center space-x-1.5 shadow">
+        <ion-icon name="cart-outline" class="text-sm"></ion-icon>
+        <span>Cart</span>
+        <span *ngIf="shopCart.length > 0" class="absolute -top-1 -right-1 bg-rose-600 text-white text-[8px] h-4 w-4 rounded-full flex items-center justify-center font-bold border border-white">{{ shopCart.length }}</span>
       </button>
     </div>
   </header>
 
   <!-- Main Scrollable Area -->
   <main class="flex-1 overflow-y-auto p-4 md:p-6">
+    
     <!-- ========================================== -->
-    <!-- VIEW 0: ECOMMERCE DASHBOARD PAGE           -->
+    <!-- VIEW 0: ECOMMERCE DASHBOARD STOREFRONT VIEW -->
     <!-- ========================================== -->
     <div *ngIf="activeTab === 'dashboard'" class="max-w-6xl mx-auto space-y-6">
       
-      <!-- Stats Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        
-        <!-- Total Sales -->
-        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">TOTAL SALES VALUE</span>
-            <span class="text-xl font-extrabold text-slate-800">{{ getTotalInventoryValue() | number }} BDT</span>
-            <span class="text-[9px] text-[#4CE0E5] font-bold block">Estimated Retail Value</span>
-          </div>
-          <div class="h-11 w-11 bg-[#4CE0E5]/10 rounded-2xl flex items-center justify-center text-[#4CE0E5]">
-            <ion-icon name="cash-outline" class="text-xl"></ion-icon>
-          </div>
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-r from-[#1A3644] to-[#11222F] rounded-3xl p-6 md:p-8 text-white relative overflow-hidden shadow-lg border border-[#4CE0E5]/10">
+        <div class="max-w-md space-y-2 relative z-10">
+          <span class="bg-[#4CE0E5]/20 text-[#4CE0E5] border border-[#4CE0E5]/30 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">New Season Release</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Step into Comfort with Zaira's World</h2>
+          <p class="text-xs text-slate-300 leading-relaxed">Discover our premium range of sports sneakers, formal leather shoes, and toddler footwear designed for maximum lifestyle performance.</p>
         </div>
-
-        <!-- Total Stock -->
-        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">TOTAL SHOES IN STOCK</span>
-            <span class="text-xl font-extrabold text-slate-800">{{ getInventoryTotalStock() | number }} Pairs</span>
-            <span class="text-[9px] text-amber-500 font-bold block">Available in warehouse</span>
-          </div>
-          <div class="h-11 w-11 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500">
-            <ion-icon name="footsteps-outline" class="text-xl"></ion-icon>
-          </div>
-        </div>
-
-        <!-- Shoe Models -->
-        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">SHOE VARIANTS</span>
-            <span class="text-xl font-extrabold text-slate-800">{{ products.length }} Models</span>
-            <span class="text-[9px] text-blue-500 font-bold block">Unique barcode items</span>
-          </div>
-          <div class="h-11 w-11 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500">
-            <ion-icon name="cube-outline" class="text-xl"></ion-icon>
-          </div>
-        </div>
-
-        <!-- Low Stock warning -->
-        <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-          <div class="space-y-1">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">LOW STOCK ALERTS</span>
-            <span class="text-xl font-extrabold text-rose-600">{{ getLowStockProducts().length }} Items</span>
-            <span class="text-[9px] text-rose-500 font-bold block">Stock count under 10</span>
-          </div>
-          <div class="h-11 w-11 bg-rose-500/10 rounded-2xl flex items-center justify-center text-rose-500">
-            <ion-icon name="alert-circle-outline" class="text-xl"></ion-icon>
-          </div>
-        </div>
-
+        <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-[#4CE0E5]/5 rounded-full blur-2xl"></div>
       </div>
 
-      <!-- Center content: Distribution and Warnings -->
+      <!-- Categories Tabs Slider -->
+      <div class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-hide">
+        <button (click)="selectedCategory = 'All'" 
+                [class.bg-[#1A3644]]="selectedCategory === 'All'" 
+                [class.text-[#4CE0E5]]="selectedCategory === 'All'"
+                [class.border-[#4CE0E5]]="selectedCategory === 'All'"
+                [class.bg-white]="selectedCategory !== 'All'"
+                [class.text-slate-700]="selectedCategory !== 'All'"
+                class="px-5 py-2.5 rounded-full border border-slate-200 text-xs font-bold shadow-sm whitespace-nowrap transition-all">
+          All Shoes
+        </button>
+        <button *ngFor="let cat of categories" 
+                (click)="selectedCategory = cat.name" 
+                [class.bg-[#1A3644]]="selectedCategory === cat.name" 
+                [class.text-[#4CE0E5]]="selectedCategory === cat.name"
+                [class.border-[#4CE0E5]]="selectedCategory === cat.name"
+                [class.bg-white]="selectedCategory !== cat.name"
+                [class.text-slate-700]="selectedCategory !== cat.name"
+                class="px-5 py-2.5 rounded-full border border-slate-200 text-xs font-bold shadow-sm whitespace-nowrap transition-all">
+          {{ cat.name }}
+        </button>
+      </div>
+
+      <!-- Products Grid Layout -->
+      <div>
+        <h3 class="text-base font-extrabold text-slate-800 mb-4 flex items-center gap-2">
+          <ion-icon name="sparkles" class="text-amber-500"></ion-icon>
+          Top Selling Products
+        </h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <ng-container *ngFor="let p of products">
+            <div *ngIf="selectedCategory === 'All' || p.categoryName === selectedCategory" 
+                 class="bg-white rounded-3xl border border-slate-200/80 shadow-sm flex flex-col justify-between overflow-hidden relative hover:shadow-lg transition-all group">
+              
+              <!-- Product Image Box -->
+              <div class="h-44 bg-slate-50 border-b border-slate-100 flex items-center justify-center overflow-hidden relative">
+                <img *ngIf="p.imageUrl" [src]="p.imageUrl.startsWith('/') ? 'http://localhost:5279' + p.imageUrl : p.imageUrl" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                <ion-icon *ngIf="!p.imageUrl" name="footsteps-sharp" class="text-slate-300 text-4xl"></ion-icon>
+                
+                <!-- Save Tag -->
+                <span class="absolute top-3 left-3 bg-[#4CE0E5] text-[#1A3644] text-[8px] font-extrabold px-2 py-0.5 rounded-md shadow-sm uppercase tracking-wider">Save 20%</span>
+              </div>
+
+              <!-- Product Details -->
+              <div class="p-4 space-y-2.5 flex-1 flex flex-col justify-between">
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide">{{ p.brandName || 'Zaira Brand' }}</span>
+                    <span *ngIf="p.size" class="text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 rounded">Size: {{ p.size }}</span>
+                  </div>
+                  <h4 class="font-extrabold text-slate-800 text-xs leading-snug line-clamp-2">{{ p.name }}</h4>
+                </div>
+
+                <!-- Price and Buttons -->
+                <div class="space-y-3.5 pt-1.5">
+                  <div class="flex items-baseline space-x-2">
+                    <span class="text-sm font-extrabold text-slate-800">৳{{ p.price | number }}</span>
+                    <span class="text-[10px] text-slate-400 line-through font-bold">৳{{ (p.price * 1.25) | number }}</span>
+                  </div>
+
+                  <!-- Catalog Buttons -->
+                  <div class="grid grid-cols-2 gap-2">
+                    <button (click)="addToShopCart(p)" class="bg-[#1A3644] text-white hover:bg-[#11222F] py-2 rounded-xl text-[10px] font-extrabold transition-all flex items-center justify-center gap-1 shadow-sm">
+                      <ion-icon name="cart-outline" class="text-xs"></ion-icon> Add to Cart
+                    </button>
+                    <button (click)="buyNowProduct(p)" class="bg-amber-500 text-white hover:bg-amber-600 py-2 rounded-xl text-[10px] font-extrabold transition-all flex items-center justify-center gap-1 shadow-sm">
+                      <ion-icon name="flash-outline" class="text-xs"></ion-icon> Buy Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </ng-container>
+          <div *ngIf="products.length === 0" class="col-span-full text-center py-16 text-slate-400 text-xs font-semibold">
+            No products available in catalog.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 4: STOREFRONT CHECKOUT PAGE VIEW      -->
+    <!-- ========================================== -->
+    <div *ngIf="activeTab === 'checkout'" class="max-w-6xl mx-auto space-y-6">
+      
+      <div class="flex items-center space-x-2 text-slate-800">
+        <span class="text-slate-400 text-xs hover:underline cursor-pointer" (click)="activeTab = 'dashboard'">Home</span>
+        <span class="text-slate-400 text-xs">&gt;</span>
+        <span class="text-xs font-bold text-slate-700">Checkout</span>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Left: Low stock alerts list (Col 7) -->
-        <div class="lg:col-span-7 space-y-6">
+        <!-- Left Panel: Order Review & Shipping Forms (Col 8) -->
+        <div class="lg:col-span-8 space-y-6">
+          
+          <!-- Order review -->
           <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div class="flex items-center space-x-2 text-rose-500">
-                <ion-icon name="warning-outline" class="text-lg"></ion-icon>
-                <h3 class="font-extrabold text-slate-800 text-xs uppercase tracking-wider">Critical Low Stock Levels</h3>
-              </div>
-              <span class="bg-rose-50 text-rose-600 text-[9px] px-2 py-0.5 rounded-full font-bold">Needs Restock</span>
-            </div>
-
-            <div class="divide-y divide-slate-100 max-h-[300px] overflow-y-auto pr-1">
-              <div *ngFor="let p of getLowStockProducts()" class="py-3 flex items-center justify-between">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100">Order Review</h3>
+            
+            <div class="divide-y divide-slate-100">
+              <div *ngFor="let item of shopCart" class="py-3 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                  <div class="h-10 w-10 bg-slate-100 rounded-lg overflow-hidden border border-slate-200 flex items-center justify-center shrink-0">
-                    <img *ngIf="p.imageUrl" [src]="p.imageUrl.startsWith('/') ? 'http://localhost:5279' + p.imageUrl : p.imageUrl" class="w-full h-full object-cover">
-                    <ion-icon *ngIf="!p.imageUrl" name="footsteps-sharp" class="text-slate-300 text-lg"></ion-icon>
+                  <div class="h-12 w-12 bg-slate-50 border rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
+                    <img *ngIf="item.product.imageUrl" [src]="item.product.imageUrl.startsWith('/') ? 'http://localhost:5279' + item.product.imageUrl : item.product.imageUrl" class="w-full h-full object-cover">
+                    <ion-icon *ngIf="!item.product.imageUrl" name="footsteps" class="text-slate-300 text-xl"></ion-icon>
                   </div>
                   <div>
-                    <span class="font-bold text-slate-800 text-xs block leading-tight">{{ p.name }}</span>
-                    <span class="text-[9px] text-slate-400 font-semibold uppercase">SKU: {{ p.sku }} | Size: {{ p.size || 'N/A' }}</span>
+                    <span class="font-extrabold text-xs text-slate-800 block">{{ item.product.name }}</span>
+                    <span class="text-[9px] text-slate-400 font-bold block">Size: {{ item.product.size || 'N/A' }} | SKU: {{ item.product.sku }}</span>
                   </div>
                 </div>
-                <div class="text-right">
-                  <span class="text-xs font-extrabold text-rose-600 block">{{ p.stockQuantity }} Left</span>
-                  <span class="text-[8px] text-slate-400 font-bold block">Wholesale: {{ p.wholesalePrice }} BDT</span>
+                <div class="flex items-center space-x-3">
+                  <span class="text-xs font-bold text-slate-500">Qty: {{ item.quantity }}</span>
+                  <span class="text-xs font-extrabold text-slate-800">৳{{ (item.product.price * item.quantity) | number }}</span>
                 </div>
-              </div>
-              <div *ngIf="getLowStockProducts().length === 0" class="text-center py-12 text-slate-400 text-xs font-semibold">
-                All shoe inventory is well stocked!
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Right: Brand distribution & Quick Links (Col 5) -->
-        <div class="lg:col-span-5 space-y-6">
+          <!-- Shipping Address -->
           <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
-            <div class="flex items-center space-x-2 text-[#4CE0E5] pb-3 border-b border-slate-100">
-              <ion-icon name="pie-chart-outline" class="text-lg"></ion-icon>
-              <h3 class="font-extrabold text-slate-800 text-xs uppercase tracking-wider">Inventory Distribution</h3>
-            </div>
-
-            <div class="space-y-3 max-h-[300px] overflow-y-auto">
-              <div *ngFor="let brand of getSupplierDistribution()" class="space-y-1.5">
-                <div class="flex items-center justify-between text-xs font-bold text-slate-600">
-                  <span>{{ brand.name }}</span>
-                  <span>{{ brand.count }} Models</span>
-                </div>
-                <!-- Progress bar -->
-                <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                  <div class="h-full bg-[#1A3644]" [style.width.%]="(brand.count / products.length) * 100"></div>
-                </div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100">Shipping Address</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[9px] font-bold text-slate-400 mb-1 tracking-wider">YOUR FULL NAME *</label>
+                <input type="text" [(ngModel)]="checkoutShippingName" placeholder="e.g. Arif Hossain" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
               </div>
-              <div *ngIf="products.length === 0" class="text-center py-12 text-slate-400 text-xs font-semibold">
-                No inventory distribution metrics.
+              <div>
+                <label class="block text-[9px] font-bold text-slate-400 mb-1 tracking-wider">MOBILE PHONE NUMBER *</label>
+                <input type="text" [(ngModel)]="checkoutShippingPhone" placeholder="e.g. 01700000000" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-[9px] font-bold text-slate-400 mb-1 tracking-wider">STREET ADDRESS (House, Road, Area) *</label>
+                <input type="text" [(ngModel)]="checkoutShippingAddress" placeholder="e.g. House 45, Road 2, Sector 3, Uttara" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
+              </div>
+              <div>
+                <label class="block text-[9px] font-bold text-slate-400 mb-1 tracking-wider">DISTRICT *</label>
+                <input type="text" [(ngModel)]="checkoutDistrict" placeholder="e.g. Dhaka" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
+              </div>
+              <div>
+                <label class="block text-[9px] font-bold text-slate-400 mb-1 tracking-wider">THANA / UPPAZILA (Optional)</label>
+                <input type="text" [(ngModel)]="checkoutThana" placeholder="e.g. Uttara" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
               </div>
             </div>
           </div>
+
         </div>
 
-      </div>
-
-    </div>
-
-    
-    <!-- ========================================== -->
-    <!-- VIEW 1: CATEGORY MANAGEMENT PAGE          -->
-    <!-- ========================================== -->
-    <div *ngIf="activeTab === 'categories'" class="max-w-2xl mx-auto space-y-6">
-      
-      <!-- Category Form -->
-      <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
-        <div class="flex items-center space-x-2 text-[#4CE0E5]">
-          <ion-icon name="add-circle" class="text-xl"></ion-icon>
-          <h2 class="text-base font-extrabold">Add New Category</h2>
-        </div>
-        
-        <div class="grid grid-cols-1 gap-4">
-          <div>
-            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">CATEGORY NAME</label>
-            <input type="text" [(ngModel)]="newCategoryName" placeholder="e.g. Baby Shoes, Teenage Shoes" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
-          </div>
+        <!-- Right Panel: Payment & Totals (Col 4) -->
+        <div class="lg:col-span-4 space-y-6">
           
-          <div>
-            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">PARENT CATEGORY (Optional for subcategory)</label>
-            <select [(ngModel)]="newCategoryParentId" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
-              <option value="">-- No Parent (Root Category) --</option>
-              <option *ngFor="let cat of categories" [value]="cat.id">{{cat.name}}</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">SHOE SIZES CONFIGURATION (Comma separated)</label>
-            <input type="text" [(ngModel)]="newCategorySizes" placeholder="e.g. 39,40,41,42,43,44,45" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
-            <span class="text-[9px] text-slate-400 mt-1 block">Separate sizes with commas to load them on the product page.</span>
-          </div>
-
-          <div>
-            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">DESCRIPTION</label>
-            <textarea [(ngModel)]="newCategoryDescription" placeholder="Description of the category..." rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#4CE0E5]"></textarea>
-          </div>
-
-          <button (click)="createCategory()" class="w-full bg-[#1A3644] text-white py-3 rounded-xl text-xs font-bold shadow-md shadow-[#4CE0E5]/20 hover:bg-[#11222F] transition-all">
-            Create Category
-          </button>
-        </div>
-      </div>
-
-      <!-- Category Listing -->
-      <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
-        <div class="flex items-center space-x-2 text-[#4CE0E5]">
-          <ion-icon name="list-box-outline" class="text-xl"></ion-icon>
-          <h2 class="text-base font-extrabold">Categories & Sizes List</h2>
-        </div>
-
-        <div class="divide-y divide-slate-100">
-          <div *ngFor="let cat of categories" class="py-3.5 flex items-start justify-between">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-slate-800 text-xs">{{cat.name}}</span>
-                <span *ngIf="cat.sizes" class="bg-amber-500/10 text-amber-600 border border-amber-500/20 text-[9px] px-1.5 py-0.5 rounded-md font-bold">Sizes: {{cat.sizes}}</span>
-              </div>
-              <p class="text-[10px] text-slate-400 leading-relaxed font-semibold">{{cat.description || 'No description provided.'}}</p>
+          <!-- Payment Method -->
+          <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100">Payment Method</h3>
+            
+            <div class="grid grid-cols-2 gap-2">
+              <button (click)="checkoutPaymentMethod = 'COD'" 
+                      [class.border-[#4CE0E5]]="checkoutPaymentMethod === 'COD'"
+                      [class.bg-slate-50]="checkoutPaymentMethod === 'COD'"
+                      class="border border-slate-200 p-3 rounded-2xl flex flex-col items-center justify-center gap-1.5 transition-all text-center">
+                <ion-icon name="cash-outline" class="text-lg text-slate-600"></ion-icon>
+                <span class="text-[9px] font-extrabold text-slate-800">Cash On Delivery</span>
+              </button>
+              
+              <button (click)="checkoutPaymentMethod = 'BKASH'" 
+                      [class.border-rose-500]="checkoutPaymentMethod === 'BKASH'"
+                      [class.bg-rose-50]="checkoutPaymentMethod === 'BKASH'"
+                      class="border border-slate-200 p-3 rounded-2xl flex flex-col items-center justify-center gap-1.5 transition-all text-center">
+                <ion-icon name="wallet-outline" class="text-lg text-rose-600"></ion-icon>
+                <span class="text-[9px] font-extrabold text-slate-800">bKash Payment</span>
+              </button>
             </div>
-            <button (click)="deleteCategory(cat.id)" class="text-rose-500 hover:text-rose-700 p-1 rounded-lg hover:bg-rose-50 transition-colors">
-              <ion-icon name="trash-outline" class="text-base"></ion-icon>
+
+            <!-- bKash extra inputs -->
+            <div *ngIf="checkoutPaymentMethod === 'BKASH'" class="space-y-3 pt-2">
+              <div>
+                <label class="block text-[8px] font-bold text-rose-500 mb-1 tracking-wider">BKASH SENDER MOBILE NUMBER</label>
+                <input type="text" [(ngModel)]="checkoutMfsNumber" placeholder="017xxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:border-rose-500">
+              </div>
+              <div>
+                <label class="block text-[8px] font-bold text-rose-500 mb-1 tracking-wider">BKASH TRANSACTION ID (TrxID)</label>
+                <input type="text" [(ngModel)]="checkoutMfsTrxId" placeholder="e.g. BXB3948K93" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:border-rose-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Calculation -->
+          <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100">Order Totals</h3>
+            
+            <div class="space-y-2 text-xs font-semibold text-slate-600">
+              <div class="flex items-center justify-between">
+                <span>Subtotal</span>
+                <span class="font-bold text-slate-700">৳{{ getShopSubtotal() | number }}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>Delivery Cost</span>
+                <span class="font-bold text-slate-700">৳60</span>
+              </div>
+              <div class="flex items-center justify-between border-t border-slate-100 pt-2 text-sm text-slate-800 font-extrabold">
+                <span>Total</span>
+                <span class="text-[#1A3644]">৳{{ (getShopSubtotal() + 60) | number }}</span>
+              </div>
+            </div>
+
+            <button (click)="processStorefrontCheckout()" class="w-full bg-amber-500 text-white py-3.5 rounded-xl text-xs font-extrabold shadow-md shadow-amber-500/20 hover:bg-amber-600 transition-all uppercase tracking-wider">
+              Place Order
             </button>
           </div>
-          <div *ngIf="categories.length === 0" class="text-center py-8 text-slate-400 text-xs font-semibold">
-            No categories registered yet.
-          </div>
+
         </div>
+
       </div>
+
     </div>
 
     <!-- ========================================== -->
-    <!-- VIEW 2: SUPPLIERS & SIZES CONFIG PAGE     -->
-    <!-- ========================================== -->
-    <div *ngIf="activeTab === 'config'" class="max-w-2xl mx-auto space-y-6">
-      
-      <!-- Suppliers Form -->
-      <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
-        <div class="flex items-center space-x-2 text-[#4CE0E5]">
-          <ion-icon name="business" class="text-xl"></ion-icon>
-          <h2 class="text-base font-extrabold">Manage Suppliers</h2>
-        </div>
-
-        <div class="grid grid-cols-1 gap-4">
-          <div>
-            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">SUPPLIER NAME</label>
-            <input type="text" [(ngModel)]="newSupplierName" placeholder="e.g. Apex Bangladesh" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
-          </div>
-          
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">PHONE NUMBER</label>
-              <input type="text" [(ngModel)]="newSupplierPhone" placeholder="e.g. +8801711122233" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">ADDRESS</label>
-              <input type="text" [(ngModel)]="newSupplierAddress" placeholder="e.g. Dhaka" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
-            </div>
-          </div>
-
-          <button (click)="createSupplier()" class="w-full bg-[#1A3644] text-white py-3 rounded-xl text-xs font-bold shadow-md shadow-[#4CE0E5]/20 hover:bg-[#11222F] transition-all">
-            Add Supplier Profile
-          </button>
-        </div>
-      </div>
-
-      <!-- Suppliers List -->
-      <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
-        <div class="flex items-center space-x-2 text-[#4CE0E5]">
-          <ion-icon name="list-box" class="text-xl"></ion-icon>
-          <h2 class="text-base font-extrabold">Suppliers Directory</h2>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div *ngFor="let s of suppliers" class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 flex items-start justify-between">
-            <div class="space-y-1">
-              <span class="font-extrabold text-slate-800 text-xs block">{{s.name}}</span>
-              <span class="text-[10px] text-slate-500 flex items-center font-semibold"><ion-icon name="call-outline" class="mr-1"></ion-icon>{{s.phoneNumber || 'No phone'}}</span>
-              <span class="text-[10px] text-slate-400 flex items-center font-semibold"><ion-icon name="location-outline" class="mr-1"></ion-icon>{{s.address || 'No address'}}</span>
-            </div>
-            <button (click)="deleteSupplier(s.id)" class="text-rose-500 hover:text-rose-700 p-1 rounded-lg hover:bg-rose-50 transition-colors">
-              <ion-icon name="trash-outline" class="text-base"></ion-icon>
-            </button>
-          </div>
-          <div *ngIf="suppliers.length === 0" class="col-span-2 text-center py-8 text-slate-400 text-xs font-bold">
-            No suppliers registered. Use the panel above to add.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- VIEW 3: SHOE PRODUCTS VIEW (ADD & LIST)   -->
-    <!-- ========================================== -->
-        <!-- ========================================== -->
     <!-- VIEW 3A: SHOE PRODUCTS LIST VIEW          -->
     <!-- ========================================== -->
     <div *ngIf="activeTab === 'products-list'" class="max-w-6xl mx-auto">
@@ -545,6 +529,184 @@
             Save Inventory & Generate Barcodes
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: CATEGORY MANAGEMENT PAGE (CONFIG)  -->
+    <!-- ========================================== -->
+    <div *ngIf="activeTab === 'categories'" class="max-w-2xl mx-auto space-y-6">
+      <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+        <div class="flex items-center space-x-2 text-[#4CE0E5]">
+          <ion-icon name="add-circle" class="text-xl"></ion-icon>
+          <h2 class="text-base font-extrabold text-slate-800">Add New Category</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">CATEGORY NAME</label>
+            <input type="text" [(ngModel)]="newCategoryName" placeholder="e.g. Sports Shoes, Casual Sneakers" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">PARENT CATEGORY (Optional)</label>
+            <select [(ngModel)]="newCategoryParentId" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
+              <option value="">-- No Parent (Root Category) --</option>
+              <option *ngFor="let cat of categories" [value]="cat.id">{{cat.name}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">SHOE SIZES CONFIGURATION</label>
+            <input type="text" [(ngModel)]="newCategorySizes" placeholder="e.g. 39,40,41,42,43,44" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">DESCRIPTION</label>
+            <textarea [(ngModel)]="newCategoryDescription" placeholder="Description..." rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#4CE0E5]"></textarea>
+          </div>
+          <button (click)="createCategory()" class="w-full bg-[#1A3644] text-white py-3 rounded-xl text-xs font-bold shadow-md shadow-[#4CE0E5]/20 hover:bg-[#11222F] transition-all">
+            Create Category
+          </button>
+        </div>
+      </div>
+
+      <!-- Categories List -->
+      <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+        <div class="flex items-center space-x-2 text-[#4CE0E5]">
+          <ion-icon name="list-box-outline" class="text-xl"></ion-icon>
+          <h2 class="text-base font-extrabold text-slate-800">Categories & Sizes List</h2>
+        </div>
+        <div class="divide-y divide-slate-100">
+          <div *ngFor="let cat of categories" class="py-3.5 flex items-start justify-between">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-slate-800 text-xs">{{cat.name}}</span>
+                <span *ngIf="cat.sizes" class="bg-amber-500/10 text-amber-600 border border-amber-500/20 text-[9px] px-1.5 py-0.5 rounded-md font-bold">Sizes: {{cat.sizes}}</span>
+              </div>
+              <p class="text-[10px] text-slate-400 leading-relaxed font-semibold">{{cat.description || 'No description.'}}</p>
+            </div>
+            <button (click)="deleteCategory(cat.id)" class="text-rose-500 hover:text-rose-700 p-1 rounded-lg hover:bg-rose-50 transition-colors">
+              <ion-icon name="trash-outline" class="text-base"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: SUPPLIER ADD PAGE (SUPPLIERS FORM) -->
+    <!-- ========================================== -->
+    <div *ngIf="activeTab === 'config'" class="max-w-2xl mx-auto space-y-6">
+      <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+        <div class="flex items-center space-x-2 text-[#4CE0E5]">
+          <ion-icon name="business" class="text-xl"></ion-icon>
+          <h2 class="text-base font-extrabold text-slate-800">Manage Suppliers</h2>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">SUPPLIER NAME</label>
+            <input type="text" [(ngModel)]="newSupplierName" placeholder="e.g. Apex Bangladesh" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">PHONE NUMBER</label>
+              <input type="text" [(ngModel)]="newSupplierPhone" placeholder="e.g. +8801711122233" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 mb-1 tracking-wider">ADDRESS</label>
+              <input type="text" [(ngModel)]="newSupplierAddress" placeholder="e.g. Dhaka" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-[#4CE0E5]">
+            </div>
+          </div>
+          <button (click)="createSupplier()" class="w-full bg-[#1A3644] text-white py-3 rounded-xl text-xs font-bold shadow-md shadow-[#4CE0E5]/20 hover:bg-[#11222F] transition-all">
+            Add Supplier Profile
+          </button>
+        </div>
+      </div>
+
+      <!-- Suppliers List -->
+      <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+        <div class="flex items-center space-x-2 text-[#4CE0E5]">
+          <ion-icon name="list-box" class="text-xl"></ion-icon>
+          <h2 class="text-base font-extrabold text-slate-800">Suppliers Directory</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div *ngFor="let s of suppliers" class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60 flex items-start justify-between">
+            <div class="space-y-1">
+              <span class="font-extrabold text-slate-800 text-xs block">{{s.name}}</span>
+              <span class="text-[10px] text-slate-500 flex items-center font-semibold"><ion-icon name="call-outline" class="mr-1"></ion-icon>{{s.phoneNumber || 'No phone'}}</span>
+              <span class="text-[10px] text-slate-400 flex items-center font-semibold"><ion-icon name="location-outline" class="mr-1"></ion-icon>{{s.address || 'No address'}}</span>
+            </div>
+            <button (click)="deleteSupplier(s.id)" class="text-rose-500 hover:text-rose-700 p-1 rounded-lg hover:bg-rose-50 transition-colors">
+              <ion-icon name="trash-outline" class="text-base"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE-OUT SHOPPING CART DRAWER (RIGHT)     -->
+    <!-- ========================================== -->
+    <div *ngIf="showShopCartModal" class="fixed inset-0 z-[100] flex justify-end">
+      <!-- Backdrop -->
+      <div (click)="showShopCartModal = false" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+      
+      <!-- Drawer Content -->
+      <div class="relative w-full max-w-sm bg-white h-full shadow-2xl flex flex-col justify-between z-10 border-l border-slate-200 animate-slide-in">
+        
+        <!-- Header -->
+        <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-[#1A3644] text-white">
+          <div class="flex items-center space-x-2">
+            <ion-icon name="cart-outline" class="text-xl text-[#4CE0E5]"></ion-icon>
+            <h3 class="font-extrabold text-sm tracking-wide">Shopping Cart</h3>
+          </div>
+          <button (click)="showShopCartModal = false" class="text-slate-300 hover:text-white text-xs font-bold flex items-center gap-0.5">
+            Close <ion-icon name="close-circle-outline" class="text-base"></ion-icon>
+          </button>
+        </div>
+
+        <!-- Scrollable Items List -->
+        <div class="flex-1 overflow-y-auto p-4 divide-y divide-slate-100">
+          <div *ngFor="let item of shopCart" class="py-3.5 flex items-start justify-between">
+            <div class="flex space-x-3 min-w-0">
+              <div class="h-12 w-12 bg-slate-50 border rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
+                <img *ngIf="item.product.imageUrl" [src]="item.product.imageUrl.startsWith('/') ? 'http://localhost:5279' + item.product.imageUrl : item.product.imageUrl" class="w-full h-full object-cover">
+                <ion-icon *ngIf="!item.product.imageUrl" name="footsteps" class="text-slate-300 text-xl"></ion-icon>
+              </div>
+              <div class="space-y-0.5 min-w-0">
+                <span class="font-bold text-slate-800 text-xs truncate block leading-tight">{{ item.product.name }}</span>
+                <span class="text-[9px] text-slate-400 font-bold block">Size: {{ item.product.size || 'N/A' }}</span>
+                
+                <!-- Qty Adjustment -->
+                <div class="flex items-center space-x-1.5 pt-1.5">
+                  <button (click)="updateShopCartQuantity(item, -1)" class="h-5 w-5 bg-slate-100 border text-slate-700 rounded flex items-center justify-center hover:bg-slate-200 text-xs font-bold">-</button>
+                  <span class="text-xs font-bold text-slate-700">{{ item.quantity }}</span>
+                  <button (click)="updateShopCartQuantity(item, 1)" class="h-5 w-5 bg-slate-100 border text-slate-700 rounded flex items-center justify-center hover:bg-slate-200 text-xs font-bold">+</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-right pl-2 shrink-0">
+              <span class="text-xs font-extrabold text-slate-800 block">৳{{ (item.product.price * item.quantity) | number }}</span>
+              <button (click)="updateShopCartQuantity(item, -item.quantity)" class="text-rose-500 text-[10px] font-bold hover:underline mt-1">Remove</button>
+            </div>
+          </div>
+          <div *ngIf="shopCart.length === 0" class="text-center py-16 text-slate-400 text-xs font-semibold">
+            Your cart is empty.
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="p-4 border-t border-slate-100 space-y-4 bg-slate-50">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+            <span>Subtotal</span>
+            <span class="text-base text-[#1A3644]">৳{{ getShopSubtotal() | number }}</span>
+          </div>
+
+          <button (click)="showShopCartModal = false; activeTab = 'checkout'" [disabled]="shopCart.length === 0" class="w-full bg-[#1A3644] text-white hover:bg-[#11222F] py-3 rounded-xl text-xs font-extrabold uppercase tracking-wider shadow-md shadow-[#1A3644]/20 transition-all disabled:opacity-50 disabled:pointer-events-none">
+            Checkout Now
+          </button>
+        </div>
+
       </div>
     </div>
 

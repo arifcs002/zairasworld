@@ -23,3 +23,7 @@
 *.log
 wwwroot/uploads/*
 !wwwroot/uploads/.gitkeep
+
+# Secrets and local configurations
+**/appsettings.json
+**/appsettings.Development.json

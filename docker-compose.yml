@@ -48,7 +48,7 @@ services:
     ports:
       - "5000:8080"
     environment:
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=ecommerce_db;Username=dev_user;Password=A3w@A#Mh#896!S;Include Error Detail=true;
+      - ConnectionStrings__DefaultConnection=Host=194.5.152.74;Port=5432;Database=ecommerce_db;Username=dev_user;Password=A3w@A#Mh#896!S;Include Error Detail=true;
       - Redis__Configuration=redis:6379
       - Jwt__Secret=super-secret-key-change-in-prod-long-enough-32-chars
       - AwsS3__ServiceUrl=http://minio:9000
